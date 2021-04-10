@@ -39,11 +39,11 @@ pip install -r requirements.txt
 
 #### Commands
 After the dependency installation, train.py can be used to perform the experiments. There are five required arguments for the command:
-```sh --timeline```: path to the file containing the subjects table
-```sh --mapping```: path to the file containing the reports table
-```sh --feature_path```: path to the file containing features
-```sh --model```: model specification - coxph, deepsurv, or lstm_cox
-```sh --feature_set```: feature specification - label, hidden, or hidden_sequence
+* ```--timeline```: path to the file containing the subjects table
+* ```--mapping```: path to the file containing the reports table
+* ```--feature_path```: path to the file containing features
+* ```--model```: model specification - coxph, deepsurv, or lstm_cox
+* ```--feature_set```: feature specification - label, hidden, or hidden_sequence
 
 ```sh
 python train.py --timeline {file path} --mapping {file path} --feature_path {file path} --model {coxph, deepsurv, lstm_cox} --feature_set {label, hidden, hidden_sequence}
