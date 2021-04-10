@@ -1,6 +1,6 @@
 ## Leveraging Deep Representations of Radiology Reports in Survival Analysis for Predicting Heart Failure Patient Mortality
 
-### Data description
+### Data Description
 
 *Note*: All dates are relative days after randomization
 
@@ -28,6 +28,8 @@
 * `biobert hidden`: embeddings by [BioBert](https://github.com/dmis-lab/biobert).
 * `bluebert hidden`: embeddings by [BlueBert](https://github.com/ncbi-nlp/bluebert) base.
 * `bertbase hidden`: embeddings by Bert base.
+
+### Code Description
 
 #### Install Dependencies
 
