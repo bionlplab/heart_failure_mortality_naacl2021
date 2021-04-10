@@ -87,11 +87,18 @@ def normalize_data(data_df):
 
   return data_df
 
+def return_mapping(file_path):
+  mapping = pd.read_csv(file_path)
+  mapping['subject_id'] = mapping['subject_id'].apply(lambda x: x.strip("s"))
+
+  return mapping
+
 def return_timelines(file_path):
   timelines = pd.read_csv(file_path)
   timelines = timelines.rename(columns={"time_to_event": "duration"})
-  timelines = timelines[["mrn", "event", "duration"]]
+  timelines = timelines[["subject_id", "event", "duration", "fold_index"]]
   timelines = timelines[~(timelines["duration"] < 0)].dropna()
+  timelines['subject_id'] = timelines['subject_id'].apply(lambda x: x.strip("s"))
 
   return timelines
 

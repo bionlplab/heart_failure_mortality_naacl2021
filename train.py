@@ -18,17 +18,11 @@ class LSTMCox(nn.Module):
   def __init__(self, embedding_dim, hidden_dim, n_layers, output_size, drop_prob=0.7):
     super().__init__()
     self.n_layers = n_layers
-    self.hidden_dim = hidden_dim
-    self.embedding_dim = embedding_dim
-    
     self.lstm = nn.LSTM(embedding_dim, hidden_dim, n_layers, dropout=0, batch_first=True)
     self.fc = nn.Linear(hidden_dim, output_size, bias=False)
-    self.activation = nn.Sigmoid()
 
   def forward(self, input):
-    hidden = (torch.randn(1,len(input), self.hidden_dim), torch.randn(1, len(input), self.hidden_dim))  
     lstm_out, _ = self.lstm(input)
-    
     out = self.fc(lstm_out[:, -1, :])
 
     return out
@@ -84,8 +78,6 @@ def train_deepsurv(data_df, r_splits):
   time_auc_60 = []
   time_auc_365 = []
 
-  batch_size = 256
-
   for i in range(len(r_splits)):
     print("\nIteration %s"%(i))
     
@@ -94,7 +86,7 @@ def train_deepsurv(data_df, r_splits):
     
     xcols = list(df_train.columns)
 
-    for col_name in ["mrn", "event", "duration", "report"]:
+    for col_name in ["subject_id", "event", "duration"]:
       if col_name in xcols:
         xcols.remove(col_name)
 
@@ -128,7 +120,13 @@ def train_deepsurv(data_df, r_splits):
     net = tt.practical.MLPVanilla(in_features, num_nodes, out_features, batch_norm, dropout, output_bias=output_bias)
 
     model = CoxPH(net, tt.optim.Adam)
-    model.optimizer.set_lr(0.01)
+    model.optimizer.set_lr(0.0001)
+
+    if x_train.shape[0] % 2:
+      batch_size = 255
+    else:
+      batch_size = 256
+
     log = model.fit(x_train, y_train, batch_size, epochs, callbacks, val_data=val, val_batch_size=batch_size)
 
     model.compute_baseline_hazards()
@@ -162,7 +160,7 @@ def train_LSTMCox(data_df, r_splits):
   in_features = 768
   out_features = 1
   batch_norm = True
-  dropout = 0.7
+  dropout = 0.6
   output_bias = False
 
   c_index_at = []
@@ -171,8 +169,6 @@ def train_LSTMCox(data_df, r_splits):
   time_auc_30 = []
   time_auc_60 = []
   time_auc_365 = []
-
-  batch_size = 256
 
   for i in range(len(r_splits)):
     print("\nIteration %s"%(i))
@@ -202,7 +198,13 @@ def train_LSTMCox(data_df, r_splits):
     net = LSTMCox(768, 32, 1, 1)
 
     model = CoxPH(net, tt.optim.Adam)
-    model.optimizer.set_lr(0.01)
+    model.optimizer.set_lr(0.0001)
+
+    if x_train.shape[0] % 2:
+      batch_size = 255
+    else:
+      batch_size = 256
+      
     log = model.fit(x_train, y_train, batch_size, epochs, callbacks, val_data=val, val_batch_size=batch_size)
 
     model.compute_baseline_hazards()
@@ -235,7 +237,7 @@ def get_args():
   parser.add_argument('--feature_set', type=str, required=True)
   parser.add_argument('--feature_path', type=str, required=True)
   parser.add_argument('--model', type=str, required=True)
-  parser.add_argument('--splits', type=str, required=True)
+  parser.add_argument('--mapping', type=str, required=True)
 
   args = parser.parse_args()
 
@@ -244,28 +246,24 @@ def get_args():
 if __name__ == '__main__':
   args = get_args()
   timelines = return_timelines(args.timeline)
-  fold_index = pd.read_csv(args.splits)
+  mapping = return_mapping(args.mapping)
   cv_splits = get_splits()
 
   print("Preparing Dataset")
-  if args.feature_set == "cnn":
-    data_df = format_cnn_labels(args.feature_path, timelines, fold_index)
-  elif args.feature_set == "chexbert":
-    data_df = format_chexbert_labels(args.feature_path, timelines, fold_index)
-  elif args.feature_set == "chexbert_hidden":
-    data_df = format_hidden_features(args.feature_path, timelines, fold_index)
+  if args.feature_set in "label":
+    data_df = format_labels(args.feature_path, timelines, mapping)
+  elif args.feature_set == "hidden":
+    data_df = format_hidden_features(args.feature_path, timelines, mapping)
   elif args.feature_set == "hidden_sequence":
-    data_df = format_hf_sequence(args.feature_path, timelines, fold_index)
+    data_df = format_hf_sequence(args.feature_path, timelines, mapping)
 
   if args.model == "coxph":
     c_index_at, c_index_30, time_auc_30, time_auc_60, time_auc_365 = train_coxph(data_df, cv_splits)
   elif args.model == "deepsurv":
     c_index_at, c_index_30, time_auc_30, time_auc_60, time_auc_365 = train_deepsurv(data_df, cv_splits)
-  elif args.model == "lstmcox":
+  elif args.model == "lstm_cox":
     c_index_at, c_index_30, time_auc_30, time_auc_60, time_auc_365 = train_LSTMCox(data_df, cv_splits)
 
   for data in ["c_index_30", "c_index_at", "time_auc_30", "time_auc_60", "time_auc_365"]:
     center, pm = mean_confidence_interval(eval(data))
     print("\n{}: {}".format(data, str("%.3f"%(center)) + " ± " + str("%.3f"%(pm))))
-
-
