@@ -29,6 +29,26 @@
 * `bluebert hidden`: embeddings by [BlueBert](https://github.com/ncbi-nlp/bluebert) base.
 * `bertbase hidden`: embeddings by Bert base.
 
+#### Install Dependencies
+
+The package list is available in requirements.txt. Run the command below to install the packages:
+
+```sh
+pip install -r requirements.txt
+```
+
+#### Commands
+After the dependency installation, train.py can be used to perform the experiments. There are five required arguments for the command:
+```sh --timeline```: path to the file containing the subjects table
+```sh --mapping```: path to the file containing the reports table
+```sh --feature_path```: path to the file containing features
+```sh --model```: model specification - coxph, deepsurv, or lstm_cox
+```sh --feature_set```: feature specification - label, hidden, or hidden_sequence
+
+```sh
+python train.py --timeline {file path} --mapping {file path} --feature_path {file path} --model {coxph, deepsurv, lstm_cox} --feature_set {label, hidden, hidden_sequence}
+```
+
 Lee HG, Schoole E, Al'Aref S, Beecy A, Peng Y. Leveraging Deep Representations of Radiology Reports in SurvivalAnalysis for Predicting Heart Failure Patient Mortality. In NAACL. 2021.
 
 ```
