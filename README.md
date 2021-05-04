@@ -48,7 +48,8 @@ After the dependency installation, train.py can be used to perform the experimen
 * ```--feature_set```: feature specification - label, hidden, or hidden_sequence
 
 ```sh
-python train.py --timeline {file path} --mapping {file path} --feature_path {file path} --model {coxph, deepsurv, lstm_cox} --feature_set {label, hidden, hidden_sequence}
+python train.py --timeline {file path} --mapping {file path} --feature_path {file path} \
+  --model {coxph, deepsurv, lstm_cox} --feature_set {label, hidden, hidden_sequence}
 ```
 
 Lee HG, Schoole E, Al'Aref S, Beecy A, Peng Y. Leveraging Deep Representations of Radiology Reports in SurvivalAnalysis for Predicting Heart Failure Patient Mortality. In NAACL. 2021.
@@ -56,7 +57,8 @@ Lee HG, Schoole E, Al'Aref S, Beecy A, Peng Y. Leveraging Deep Representations o
 ```
 @InProceedings{lee2021leveraging,
   author    = {Hyun Gi Lee and Evan Scholle and Subhi Al’Aref and Ashley Beecy and Yifan Peng},
-  title     = {Leveraging Deep Representations of Radiology Reports in SurvivalAnalysis for Predicting Heart Failure Patient Mortality},
+  title     = {Leveraging Deep Representations of Radiology Reports in SurvivalAnalysis 
+               for Predicting Heart Failure Patient Mortality},
   booktitle = {NAACL},
   year      = {2021},
 }
