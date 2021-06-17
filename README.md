@@ -52,15 +52,26 @@ python train.py --timeline {file path} --mapping {file path} --feature_path {fil
   --model {coxph, deepsurv, lstm_cox} --feature_set {label, hidden, hidden_sequence}
 ```
 
-Lee HG, Schoole E, Al'Aref S, Beecy A, Peng Y. Leveraging Deep Representations of Radiology Reports in SurvivalAnalysis for Predicting Heart Failure Patient Mortality. In NAACL. 2021.
+### How to cite this work
+
+Lee HG, Schoole E, Al'Aref S, Beecy A, Peng Y. [Leveraging Deep Representations of Radiology Reports in SurvivalAnalysis for Predicting Heart Failure Patient Mortality](https://www.aclweb.org/anthology/2021.naacl-main.358). In NAACL. 2021;4533-4538.
 
 ```
 @InProceedings{lee2021leveraging,
-  author    = {Hyun Gi Lee and Evan Scholle and Subhi Al’Aref and Ashley Beecy and Yifan Peng},
-  title     = {Leveraging Deep Representations of Radiology Reports in SurvivalAnalysis 
-               for Predicting Heart Failure Patient Mortality},
-  booktitle = {NAACL},
-  year      = {2021},
+    title = "Leveraging Deep Representations of Radiology Reports in Survival Analysis for Predicting Heart Failure Patient Mortality",
+    author = "Lee, Hyun Gi  and
+      Sholle, Evan  and
+      Beecy, Ashley  and
+      Al{'}Aref, Subhi  and
+      Peng, Yifan",
+    booktitle = "Proceedings of the 2021 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies",
+    month = jun,
+    year = "2021",
+    address = "Online",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/2021.naacl-main.358",
+    doi = "10.18653/v1/2021.naacl-main.358",
+    pages = "4533--4538",
 }
 ```
 
